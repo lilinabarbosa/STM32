@@ -1,3 +1,4 @@
+
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
@@ -113,6 +114,47 @@ void aula27(void){
 	}
 
 }
+
+void aula01_9(void){
+
+	Utility_Init();
+	GPIO_Clock_Enable(GPIOA);
+	GPIO_Pin_Mode(GPIOA, PIN_6, OUTPUT);
+	GPIO_Resistor_Enable(GPIOE, PIN_3,PULL_UP);
+	GPIO_Clock_Enable(GPIOE);
+	GPIO_Pin_Mode(GPIOE, PIN_3, INPUT);
+	int time = 10000;
+	int count = 1;
+	while(1){
+
+		if (!GPIO_Read_Pin(GPIOE, PIN_3) && count ==1){
+			time = 1000;
+			GPIO_Write_Pin(GPIOA, PIN_6, LOW);
+					GPIO_Write_Pin(GPIOA, PIN_6,HIGH);
+					Delay_ms(time);
+
+			count =0;
+			Delay_ms(200);
+
+		} else if(!GPIO_Read_Pin(GPIOE, PIN_3) && count ==0){
+			time = 10000;
+			GPIO_Write_Pin(GPIOA, PIN_6, LOW);
+							GPIO_Write_Pin(GPIOA, PIN_6,HIGH);
+			count =1;
+			Delay_ms(200);
+
+
+		}
+
+
+
+
+
+
+		}
+
+
+}
 /* USER CODE END 0 */
 
 
@@ -156,7 +198,8 @@ int main(void)
   GPIOE->MODER |= 0b01 << 24;
   /* USER CODE END 2 */
   //aula20();
-  aula27();
+  //aula27();
+  aula01_9();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
