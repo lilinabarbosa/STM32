@@ -153,10 +153,23 @@ void aula_10_09(void){
 	GPIO_Clock_Enable(GPIOE);
 	GPIO_Resistor_Enable(GPIOE, PIN_3,PULL_UP);
 	GPIO_Pin_Mode(GPIOE, PIN_3, INPUT);
+
 	GPIO_Clock_Enable(GPIOD);
 	GPIO_Pin_Mode(GPIOD, PIN_8, OUTPUT);
+
 	EXTI_Config(EXTI3, GPIOE, FALLING_EDGE);
 	NVIC_EnableIRQ(EXTI3_IRQn);
+
+	GPIO_Clock_Enable(GPIOA);
+	GPIO_Pin_Mode(GPIOA, PIN_6, OUTPUT);
+
+
+	EXTI_Config(EXTI4, GPIOE, FALLING_EDGE);
+	NVIC_EnableIRQ(EXTI4_IRQn);
+
+
+	GPIO_Resistor_Enable(GPIOE, PIN_4,PULL_UP);
+	GPIO_Pin_Mode(GPIOE, PIN_4, INPUT);
 
 
 
@@ -315,12 +328,38 @@ void EXTI3_IRQHandler(){
 		estado=1;
 
 	}
+
+
+
 	if(estado==1){
 		GPIO_Write_Pin(GPIOD, PIN_8, LOW);
 		estado=0;
 
 	}
 
+}
+
+void EXTI4_IRQHandler(){
+
+	int estado=0;
+
+	if (!GPIO_Read_Pin(GPIOE, PIN_4) && estado==0){
+		GPIO_Write_Pin(GPIOA, PIN_6, HIGH );
+		Delay_ms(50);
+		GPIO_Write_Pin(GPIOA, PIN_6, LOW);
+		Delay_ms(100);
+		GPIO_Write_Pin(GPIOA, PIN_6, HIGH );
+		Delay_ms(50);
+		GPIO_Write_Pin(GPIOA, PIN_6, LOW);
+		estado=1;
+
+	}
+
+	if(estado==1){
+			GPIO_Write_Pin(GPIOA, PIN_6, LOW);
+			estado=0;
+
+		}
 }
 /* USER CODE END 4 */
 
