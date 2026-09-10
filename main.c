@@ -123,29 +123,22 @@ void aula01_9(void){
 	GPIO_Resistor_Enable(GPIOE, PIN_3,PULL_UP);
 	GPIO_Clock_Enable(GPIOE);
 	GPIO_Pin_Mode(GPIOE, PIN_3, INPUT);
-	int time = 10000;
-	int count = 1;
+	int time = 1000;
+
 	while(1){
 
-		if (!GPIO_Read_Pin(GPIOE, PIN_3) && count ==1){
-			time = 1000;
-			GPIO_Write_Pin(GPIOA, PIN_6, LOW);
-					GPIO_Write_Pin(GPIOA, PIN_6,HIGH);
-					Delay_ms(time);
-
-			count =0;
-			Delay_ms(200);
-
-		} else if(!GPIO_Read_Pin(GPIOE, PIN_3) && count ==0){
-			time = 10000;
-			GPIO_Write_Pin(GPIOA, PIN_6, LOW);
-							GPIO_Write_Pin(GPIOA, PIN_6,HIGH);
-			count =1;
-			Delay_ms(200);
-
+		if (!GPIO_Read_Pin(GPIOE, PIN_3)){
+			if  (time ==1000){
+				time = 100;
+			} else {
+				time = 1000;
+			}
 
 		}
-
+	GPIO_Write_Pin(GPIOA, PIN_6, LOW);
+	Delay_ms(time);
+	GPIO_Write_Pin(GPIOA, PIN_6, HIGH);
+	Delay_ms(time);
 
 
 
@@ -155,6 +148,23 @@ void aula01_9(void){
 
 
 }
+void aula_10_09(void){
+	Utility_Init();
+	GPIO_Clock_Enable(GPIOE);
+	GPIO_Resistor_Enable(GPIOE, PIN_3,PULL_UP);
+	GPIO_Pin_Mode(GPIOE, PIN_3, INPUT);
+	GPIO_Clock_Enable(GPIOD);
+	GPIO_Pin_Mode(GPIOD, PIN_8, OUTPUT);
+	EXTI_Config(EXTI3, GPIOE, FALLING_EDGE);
+	NVIC_EnableIRQ(EXTI3_IRQn);
+
+
+
+	while (1){
+
+	}
+}
+
 /* USER CODE END 0 */
 
 
@@ -199,7 +209,8 @@ int main(void)
   /* USER CODE END 2 */
   //aula20();
   //aula27();
-  aula01_9();
+  //aula01_9();
+  aula_10_09();
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -288,6 +299,28 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void atraso(int valor){
 	while (valor>0) --valor;
+}
+void EXTI3_IRQHandler(){
+
+	int estado=0;
+
+	if (!GPIO_Read_Pin(GPIOE, PIN_3) && estado==0){
+		GPIO_Write_Pin(GPIOD, PIN_8, HIGH );
+		Delay_ms(50);
+		GPIO_Write_Pin(GPIOD, PIN_8, LOW);
+		Delay_ms(100);
+		GPIO_Write_Pin(GPIOD, PIN_8, HIGH );
+		Delay_ms(50);
+		GPIO_Write_Pin(GPIOD, PIN_8, LOW);
+		estado=1;
+
+	}
+	if(estado==1){
+		GPIO_Write_Pin(GPIOD, PIN_8, LOW);
+		estado=0;
+
+	}
+
 }
 /* USER CODE END 4 */
 
