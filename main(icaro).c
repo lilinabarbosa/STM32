@@ -157,13 +157,8 @@ void questao4(){
 		GPIO_Write_Pin(GPIOF,PIN_9,HIGH);
 		Delay_us(time);
 
-
-
 		GPIO_Write_Pin(GPIOF, PIN_9,LOW);
 		Delay_us(10000-time);
-
-
-
 
 		if(subindo ==1){
 			time =time +passo;
@@ -240,14 +235,9 @@ void questao6(){
 		GPIO_Write_Pin(GPIOA, PIN_2, LOW);
 		Delay_us(time);
 
-
-
 		GPIO_Write_Pin(GPIOA, PIN_1,LOW);
 	GPIO_Write_Pin(GPIOA, PIN_2,HIGH);
 		Delay_us(10000-time);
-
-
-
 
 		if(subindo ==1){
 			time =time +passo;
@@ -293,9 +283,6 @@ void questao7(){
 }
 
 void questao8(){
-
-
-
 	Utility_Init();
 
 		GPIO_Clock_Enable(GPIOA);
@@ -308,10 +295,6 @@ void questao8(){
 		GPIO_Pin_Mode(GPIOA, PIN_6, OUTPUT);
 		GPIO_Pin_Mode(GPIOB, PIN_1, OUTPUT);
 		GPIO_Pin_Mode(GPIOB, PIN_2, OUTPUT);
-
-
-
-
 
 		while(1){
 
@@ -364,10 +347,6 @@ void questao8(){
 			GPIO_Write_Pin(GPIOA, PIN_2, LOW);
 
 
-
-
-
-
 			}
 
 			}
@@ -387,10 +366,6 @@ void questao9(){
 		GPIO_Pin_Mode(GPIOA, PIN_4, OUTPUT);
 		GPIO_Pin_Mode(GPIOA, PIN_5, OUTPUT);
 		GPIO_Pin_Mode(GPIOA, PIN_6, OUTPUT);
-
-
-
-
 
 
 		while(1){
@@ -421,48 +396,6 @@ void questao9(){
 
 
 			}
-
-
-
-
-
-
-void questao11(){
-
-	Utility_Init();
-
-	GPIO_Clock_Enable(GPIOD);
-	GPIO_Pin_Mode(GPIOD, PIN_0, OUTPUT);
-	GPIO_Pin_Mode(GPIOD, PIN_1, OUTPUT);
-	GPIO_Pin_Mode(GPIOD, PIN_2, OUTPUT);
-	GPIO_Pin_Mode(GPIOD, PIN_3, OUTPUT);
-	GPIO_Pin_Mode(GPIOD, PIN_4, OUTPUT);
-	GPIO_Pin_Mode(GPIOD, PIN_5, OUTPUT);
-	GPIO_Pin_Mode(GPIOD, PIN_6, OUTPUT);
-
-	while(1){
-
-		for(int i =0;i<15;i++){
-
-				GPIO_Write_Port(GPIOD, ~mask[i]);
-				Delay_ms(1000);
-
-		}
-
-
-		for(int i =15;i>0;i--){
-
-						GPIO_Write_Port(GPIOD, ~mask[i]);
-						Delay_ms(1000);
-
-				}
-			}
-
-
-	}
-
-
-
 
 void questao10(void) {
     Utility_Init();
@@ -549,6 +482,41 @@ void questao10(void) {
 
 }
 
+void questao11(){
+
+	Utility_Init();
+
+	GPIO_Clock_Enable(GPIOD);
+	GPIO_Pin_Mode(GPIOD, PIN_0, OUTPUT);
+	GPIO_Pin_Mode(GPIOD, PIN_1, OUTPUT);
+	GPIO_Pin_Mode(GPIOD, PIN_2, OUTPUT);
+	GPIO_Pin_Mode(GPIOD, PIN_3, OUTPUT);
+	GPIO_Pin_Mode(GPIOD, PIN_4, OUTPUT);
+	GPIO_Pin_Mode(GPIOD, PIN_5, OUTPUT);
+	GPIO_Pin_Mode(GPIOD, PIN_6, OUTPUT);
+
+	while(1){
+
+		for(int i =0;i<15;i++){
+
+				GPIO_Write_Port(GPIOD, ~mask[i]);
+				Delay_ms(1000);
+
+		}
+
+
+		for(int i =15;i>0;i--){
+
+						GPIO_Write_Port(GPIOD, ~mask[i]);
+						Delay_ms(1000);
+
+				}
+			}
+
+
+	}
+
+
 void questao12(){
 
 	Utility_Init();
@@ -562,20 +530,8 @@ void questao12(){
 	 while(1){
 
 
-
-
-
-
-
-	 }
-
-
-
-
-
-
 }
-
+}
 /* USER CODE END 0 */
 
 
@@ -622,42 +578,22 @@ void questao14(){
 
 
 	    GPIO_Clock_Enable(GPIOA);
-
-
 	    GPIO_Pin_Mode(GPIOA, PIN_1, OUTPUT);
 	    GPIO_Output_Type(GPIOA, PIN_1, PUSH_PULL);
-
-
 	    GPIO_Pin_Mode(GPIOA, PIN_2, OUTPUT);
 	    GPIO_Output_Type(GPIOA, PIN_2, PUSH_PULL);
-
-
 	    GPIO_Pin_Mode(GPIOA, PIN_3, ALTERNATE);
 	    GPIO_Alternate_Function(GPIOA, PIN_3, 2);
 
-
 	    RCC->APB1ENR |= RCC_APB1ENR_TIM5EN;
-
 	    TIM5->PSC = 83;
 	    TIM5->ARR = 499;
-
-
 	    TIM5->CCMR2 &= ~(0b111 << 12);
 	    TIM5->CCMR2 |= (0b110 << 12);
-
-
 	    TIM5->CCMR2 |= TIM_CCMR2_OC4PE;
-
-
 	    TIM5->CCER |= TIM_CCER_CC4E;
-
-
 	    TIM5->CCR4 = 0;
-
-
 	    TIM5->EGR = TIM_EGR_UG;
-
-
 	    TIM5->CR1 |= TIM_CR1_CEN;
 
 	    while(1) {
@@ -706,10 +642,6 @@ void questao15(){
 
 	while(1){
 
-
-
-
-
 		Delay_ms(50);
 
 		if(!GPIO_Read_Pin(GPIOE,PIN_3)){
@@ -734,26 +666,15 @@ void questao16(void) {
 
     GPIO_Clock_Enable(GPIOA);
     GPIO_Pin_Mode(GPIOA, PIN_1, OUTPUT);
-
-
     GPIO_Clock_Enable(GPIOE);
-
-
     GPIO_Pin_Mode(GPIOE, PIN_3, INPUT);
     GPIO_Resistor_Enable(GPIOE, PIN_3, PULL_UP);
-
-
     GPIO_Pin_Mode(GPIOE, PIN_4, INPUT);
     GPIO_Resistor_Enable(GPIOE, PIN_4, PULL_UP);
-
-
-    EXTI_Config(EXTI3, GPIOE, FALLING_EDGE);
+	GPIO_IntRegister(GPIOE, PIN_3, minha_isr, FALLING_EDGE);
     NVIC_EnableIRQ(EXTI3_IRQn);
 
     int estado = 0;
-
-
-
     while (1) {
         if (!GPIO_Read_Pin(GPIOE, PIN_4) && estado == 0) {
         	int tempo = 0;
@@ -785,28 +706,17 @@ void questao17(){
 
 	Utility_Init();
 
-
     GPIO_Clock_Enable(GPIOA);
     GPIO_Pin_Mode(GPIOA, PIN_1, OUTPUT);
     GPIO_Pin_Mode(GPIOA, PIN_2, OUTPUT);
-
-
     GPIO_Clock_Enable(GPIOE);
-
-
     GPIO_Pin_Mode(GPIOE, PIN_3, INPUT);
     GPIO_Resistor_Enable(GPIOE, PIN_3, PULL_UP);
-
-
     GPIO_Pin_Mode(GPIOE, PIN_4, INPUT);
     GPIO_Resistor_Enable(GPIOE, PIN_4, PULL_UP);
     int estado = 0;
-
     GPIO_Pin_Mode(GPIOA, PIN_3, INPUT);
     GPIO_Resistor_Enable(GPIOA, PIN_3, PULL_UP);
-
-
-
 
     while(1){
 
@@ -814,16 +724,12 @@ void questao17(){
 
     		GPIO_Write_Pin(GPIOA, PIN_1, HIGH);
     		estado=1;
-
-
     	}
     	if(!GPIO_Read_Pin(GPIOE, PIN_4) && estado ==0){
 
-    	    		GPIO_Write_Pin(GPIOA, PIN_2, HIGH);
-    	    		estado=1;
-
-
-    	    	}
+    	    	GPIO_Write_Pin(GPIOA, PIN_2, HIGH);
+    	    	estado=1;
+    	}
     	if(!GPIO_Read_Pin(GPIOA, PIN_3) && estado ==1){
 
     		GPIO_Write_Pin(GPIOA, PIN_1, LOW);
@@ -840,11 +746,7 @@ void questao17(){
 
 void questao18(){
 
-
-
 	Utility_Init();
-
-
 	    GPIO_Clock_Enable(GPIOA);
 	    GPIO_Clock_Enable(GPIOE);
 	    GPIO_Pin_Mode(GPIOA, PIN_1, OUTPUT);
@@ -889,16 +791,10 @@ void questao18(){
 
 void questao20(){
 
-
-
 	Utility_Init();
-
-
 	    GPIO_Clock_Enable(GPIOA);
 	    GPIO_Pin_Mode(GPIOA, PIN_1, OUTPUT);
 	    GPIO_Write_Pin(GPIOA, PIN_1, LOW);
-
-
 	    GPIO_Pin_Mode(GPIOA, PIN_6, OUTPUT);
 	    GPIO_Pin_Mode(GPIOA, PIN_7, INPUT);
 
@@ -1057,25 +953,23 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   /* USER CODE BEGIN 2 */
-
-  //aula01_09();
-  //questao3();
-  //questao6();
- // questao8();
-  //questao9();
-  	//questao4();
-  //questao5();
-  //questao12();
-  //questao11();
-  //questao7();
-  //questao10();
- // questao15();
-  //questao16();
-  //questao13();
-  //questao18();
-  //questao17();
- // questao20();
-  questao14();
+//questao3();
+//questao6();
+//questao8();
+//questao9();
+//questao4();
+//questao5();
+//questao12();
+//questao11();
+//questao7();
+//questao10();
+//questao15();
+//questao16();
+//questao13();
+//questao18();
+//questao17();
+// questao20();
+//questao14();
   /* USER CODE END 2 */
 
   /* Infinite loop */
