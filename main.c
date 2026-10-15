@@ -23,6 +23,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "Utility.h"
+#include "stdio.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -212,6 +213,26 @@ void aula08_10(){
 
 }
 
+void aula15_10(){
+	Utility_Init();
+	USART1_Init();
+
+	ADC_Init(ADC1, SINGLE_CHANNEL, ADC_RES_12BITS );
+	ADC_SingleChannel(ADC1, ADC_IN0);
+
+
+
+	while(1){
+		uint16_t valor_convertido;
+		valor_convertido = ADC_GetSingleConversion(ADC1);
+		float calculo = (valor_convertido * 3.3)/4095;
+		printf("VOLTAGE = %.2f V\n ", calculo);
+
+		Delay_ms(100);
+	}
+}
+
+
 /* USER CODE END 0 */
 
 
@@ -258,8 +279,10 @@ int main(void)
   //aula27();
   //aula01_9();
   //aula_10_09();
-  aula08_10();
+  //aula08_10();
+  aula15_10();
   /* Infinite loop */
+
 
   /* USER CODE BEGIN WHILE */
   while (1)
