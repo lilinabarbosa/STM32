@@ -357,7 +357,40 @@ void aula10_11(){
 
 }
 
+void aula12_11(){
+	Utility_Init();
+	USART1_Init();
+	GPIO_Clock_Enable(GPIOA);
+	GPIO_Pin_Mode(GPIOA, PIN_6, ALTERNATE);
+	//Funcao alternativa 2 TIM5
+	GPIOA->AFR[0] |= (0b0010<<24);
 
+	//Habilita Timer clock
+	RCC->APB1ENR |= RCC_APB1ENR_TIM3EN;
+	TIM3->CR1 &= ~TIM_CR1_DIR;
+	TIM3-> PSC=219;
+	TIM3->ARR = 99;
+	TIM3->CCMR1 |= TIM_CCMR1_OC1M_2 | TIM_CCMR1_OC1M_1;
+	TIM3-> CCMR1 |= TIM_CCMR1_OC1PE;
+	TIM3-> CCER |= TIM_CCER_CC1E;
+	TIM3-> CCER |= TIM_CCER_CC1P;
+	TIM3-> EGR = 1;
+	TIM3->CR1 |= TIM_CR1_CEN;
+
+	ADC_Init(ADC1, SINGLE_CHANNEL, ADC_RES_12BITS );
+	ADC_SingleChannel(ADC1, ADC_IN0);
+
+
+	while(1){
+		float media=0;
+		for(int i=0;i<50;i++){
+			media += (ADC_GetSingleConversion(ADC1)*100)/4095;
+		}
+		media = media/50;
+		TIM3->CCR1 = media;
+
+	}
+}
 
 
 
@@ -411,7 +444,7 @@ int main(void)
   //aula_10_09();
   //aula08_10();
   //aula05_11();
-  aula10_11();
+  aula12_11();
   /* Infinite loop */
 
 
