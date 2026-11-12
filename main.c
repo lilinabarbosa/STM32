@@ -203,15 +203,10 @@ void aula08_10(){
 			Delay_ms(20);
 
 
-
-
-
-
-
 		}
-	}
+	}}
 
-}
+
 
 void aula15_10(){
 	Utility_Init();
@@ -232,6 +227,139 @@ void aula15_10(){
 	}
 }
 
+void aula27_10(){
+	Utility_Init();
+	USART1_Init();
+	GPIO_Clock_Enable(GPIOA);
+	GPIO_Pin_Mode(GPIOA, PIN_6, OUTPUT);
+	ADC_Init(ADC1, SINGLE_CHANNEL, ADC_RES_12BITS );
+	ADC_SingleChannel(ADC1, ADC_IN0);
+	//uint16_t list[50];
+	float media=0;
+
+
+	while(1){
+		for(int i=0;i<50;i++){
+			media += (ADC_GetSingleConversion(ADC1)*3.3)/4095;
+		}
+		media = media/50;
+		printf("VOLTAGE = %.2f V\n ", media);
+		if(media>2){
+			GPIO_Write_Pin(GPIOA, PIN_6, LOW);
+			printf("B");
+		}else{
+			printf("A");
+			GPIO_Write_Pin(GPIOA, PIN_6, HIGH);
+		}
+		HAL_Delay(67);
+
+	}
+	}
+
+void aula03_11(){
+	 Utility_Init();
+	 USART1_Init();
+	 GPIO_Clock_Enable(GPIOA);
+	 //GPIO_Pin_Mode(GPIOA, PIN_6, OUTPUT);
+	 ADC_Init(ADC1, SINGLE_CHANNEL, ADC_RES_12BITS );
+	 ADC_SingleChannel(ADC1, ADC_IN0);
+	 float V;
+	 int v1;
+	 int v2;
+	 while(1){
+		 V= (ADC_GetSingleConversion(ADC1)*(1600-20))/4095+20;
+		 v1 = (int) V;
+		 v2 = (V - v1) *100;
+		 printf("%d . %.2d\n", v1, v2);
+		 Delay_ms(500);
+	 }
+
+}
+
+void aula03_11_2(){
+	 Utility_Init();
+	 USART1_Init();
+	 GPIO_Clock_Enable(GPIOA);
+	 //GPIO_Pin_Mode(GPIOA, PIN_6, OUTPUT);
+	 ADC_Init(ADC1, SINGLE_CHANNEL, ADC_RES_12BITS );
+	 ADC_SingleChannel(ADC1, ADC_IN0);
+	 float V;
+	 int v1, v2;
+	 while(1){
+		 V= (ADC_GetSingleConversion(ADC1)*(800-100))/4095+100;
+		 v1 = (int) V;
+		 v2 = (V - v1) *100;
+		 printf("%d . %.2d\n", v1, v2);
+		 Delay_ms(301);
+	 }
+
+}
+
+void aula05_11(){
+	Utility_Init();
+
+	uint16_t samples[100] = {
+		        2048, 2176, 2304, 2431, 2557, 2680, 2801, 2919, 3034, 3144,
+		        3251, 3352, 3448, 3538, 3623, 3701, 3774, 3840, 3898, 3949,
+		        3993, 4029, 4057, 4077, 4089, 4095, 4089, 4077, 4057, 4029,
+		        3993, 3949, 3898, 3840, 3774, 3701, 3623, 3538, 3448, 3352,
+		        3251, 3144, 3034, 2919, 2801, 2680, 2557, 2431, 2304, 2176,
+		        2048, 1919, 1792, 1665, 1539, 1416, 1295, 1177, 1062,  952,
+		         845,  744,  648,  558,  473,  395,  322,  256,  198,  147,
+		         103,   67,   39,   19,    7,    1,    7,   19,   39,   67,
+		         103,  147,  198,  256,  322,  395,  473,  558,  648,  744,
+		         845,  952, 1062, 1177, 1295, 1416, 1539, 1665, 1792, 1919
+		    };
+
+	//USART1_Init();
+	GPIO_Clock_Enable(GPIOA);
+
+
+	DAC_Init1(DAC_CHANNEL1);
+	ADC_Init(ADC1,MULTI_CHANNEL, ADC_RES_12BITS );
+	uint8_t a[2] ={ADC_IN0, ADC_IN1};
+	ADC_MultiChannel(ADC1, 2, a);
+	float p1;
+	float p2;
+	uint16_t adcs[2];
+
+	while(1){
+		 for(uint8_t i = 0; i<100;i++){
+			ADC_GetMultiConversions(ADC1, 2, adcs);
+			p1 = (adcs[0]*(100-5))/4095 +5;
+			p2 = adcs[1]/4095;
+			DAC_SetValue(DAC_CHANNEL1, samples[i]*p2,  DAC_RES_12BITS);
+			Delay_ms(p1);
+
+		 }
+	}
+
+}
+void aula10_11(){
+	Utility_Init();
+
+	GPIO_Clock_Enable(GPIOA);
+	GPIO_Pin_Mode(GPIOA,PIN_6,OUTPUT);
+	GPIO_Pin_Mode(GPIOA,PIN_7,OUTPUT);
+	SysTick->CTRL = 0; //DESABILITANDO O SYSTICK
+	SysTick->LOAD =	10.5e6; //CARREGA O REGISTRADOR
+	SysTick->VAL = 0;  //REINICIA O CONTADOR
+	SysTick->CTRL = 0b011;
+	//LIGA O SYSTICK, HABILITA A INTERRUPÇÃO E SELECIONA A FONTE DE CLOCK
+
+
+
+	while(1){
+		GPIO_Toggle_Pin(GPIOA, PIN_6);
+		Delay_ms(100);
+	}
+
+
+}
+
+
+
+
 
 /* USER CODE END 0 */
 
@@ -250,7 +378,7 @@ int main(void)
   /* MCU Configuration--------------------------------------------------------*/
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+  //HAL_Init();
 
   /* USER CODE BEGIN Init */
 
@@ -267,6 +395,7 @@ int main(void)
   MX_GPIO_Init();
 
   /* USER CODE BEGIN 2 */
+  /*
   RCC->AHB1ENR |= RCC_AHB1ENR_GPIOAEN;
   RCC->AHB1ENR |= RCC_AHB1ENR_GPIOCEN;
   RCC->AHB1ENR |= RCC_AHB1ENR_GPIOEEN;
@@ -274,13 +403,15 @@ int main(void)
   GPIOA->MODER |= 0b01 << 2;
   GPIOC->MODER |= 0b01 << 12;
   GPIOE->MODER |= 0b01 << 24;
+  */
   /* USER CODE END 2 */
   //aula20();
   //aula27();
   //aula01_9();
   //aula_10_09();
   //aula08_10();
-  aula15_10();
+  //aula05_11();
+  aula10_11();
   /* Infinite loop */
 
 
@@ -308,6 +439,10 @@ int main(void)
   * @brief System Clock Configuration
   * @retval None
   */
+
+
+
+
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -369,6 +504,10 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+void SysTick_Handler(void){
+	GPIOA->ODR ^= (1<<7); //ALTERNA O ESTADO DO PINO PA6
+}
+
 void atraso(int valor){
 	while (valor>0) --valor;
 }
