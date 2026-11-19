@@ -391,8 +391,109 @@ void aula12_11(){
 
 	}
 }
+void questao2_2(){
+	Utility_Init();
+	const uint16_t onda[200] = {
+			  2110, 2129, 2149, 2168, 2187, 2207, 2226, 2245, 2264, 2283,
+			  2301, 2320, 2338, 2356, 2374, 2391, 2408, 2425, 2442, 2458,
+			  2474, 2490, 2505, 2520, 2534, 2548, 2562, 2575, 2588, 2600,
+			  2612, 2623, 2633, 2644, 2653, 2662, 2671, 2679, 2686, 2693,
+			  2700, 2705, 2711, 2715, 2719, 2722, 2725, 2727, 2729, 2730,
+			  2730, 2730, 2729, 2727, 2725, 2722, 2719, 2715, 2711, 2705,
+			  2700, 2693, 2686, 2679, 2671, 2662, 2653, 2644, 2633, 2623,
+			  2612, 2600, 2588, 2575, 2562, 2548, 2534, 2520, 2505, 2490,
+			  2474, 2458, 2442, 2425, 2408, 2391, 2374, 2356, 2338, 2320,
+			  2301, 2283, 2264, 2245, 2226, 2207, 2187, 2168, 2149, 2129,
+			  2110, 2090, 2071, 2051, 2032, 2012, 1993, 1974, 1955, 1936,
+			  1918, 1899, 1881, 1863, 1845, 1828, 1811, 1794, 1777, 1761,
+			  1745, 1729, 1714, 1699, 1685, 1671, 1657, 1644, 1631, 1619,
+			  1608, 1596, 1586, 1575, 1566, 1557, 1548, 1540, 1533, 1526,
+			  1519, 1514, 1509, 1504, 1500, 1497, 1494, 1492, 1490, 1489,
+			  1489, 1489, 1490, 1492, 1494, 1497, 1500, 1504, 1509, 1514,
+			  1519, 1526, 1533, 1540, 1548, 1557, 1566, 1575, 1586, 1596,
+			  1608, 1619, 1631, 1644, 1657, 1671, 1685, 1699, 1714, 1729,
+			  1745, 1761, 1777, 1794, 1811, 1828, 1845, 1863, 1881, 1899,
+			  1918, 1936, 1955, 1974, 1993, 2012, 2032, 2051, 2071, 2090
+
+	};
+
+	DAC_Init(DAC_CHANNEL2);
+	while(1){
+		for(uint8_t i=0; i < 200; i++){
+
+			DAC_SetValue(DAC_CHANNEL2, onda[i],  DAC_RES_12BITS);
+			Delay_us(33);
+		}
+	}
+}
 
 
+
+long map(long x, long in_min, long in_max, long out_min, long out_max) {
+  return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
+void prova2_7(){
+
+	Utility_Init();
+
+		 const uint16_t SERVO_MIN_US = 1000;
+		 const uint16_t SERVO_MAX_US = 2000;
+		 uint8_t  channels[2] = {ADC_IN0, ADC_IN1};
+		 uint16_t adc[2];
+		 uint32_t sumX, sumY;
+		 long pulseX, pulseY;
+
+		 GPIO_Clock_Enable(GPIOA);
+		 GPIO_Clock_Enable(GPIOB);
+
+		 GPIO_Pin_Mode(GPIOB, PIN_6, ALTERNATE);
+		 GPIO_Pin_Mode(GPIOB, PIN_7, ALTERNATE);
+		 GPIO_Alternate_Function(GPIOB, PIN_6, AF2);
+		 GPIO_Alternate_Function(GPIOB, PIN_7, AF2);
+		 RCC->APB1ENR |= RCC_APB1ENR_TIM4EN;
+		 TIM4->PSC  = 83;
+		 TIM4->ARR  = 19999;
+		 TIM4->CCMR1 = (6 << 4)  | TIM_CCMR1_OC1PE
+				 | (6 << 12) | TIM_CCMR1_OC2PE;
+		 TIM4->CCR1 = 1500;
+		 TIM4->CCR2 = 1500;
+		 TIM4->CCER |= TIM_CCER_CC1E | TIM_CCER_CC2E;
+		 TIM4->CR1  |= TIM_CR1_ARPE;
+		 TIM4->EGR   = TIM_EGR_UG;
+		 TIM4->CR1  |= TIM_CR1_CEN;
+
+		 ADC_Init(ADC1, MULTI_CHANNEL, ADC_RES_12BITS);
+		 ADC1->SMPR2 |= (0b111 << 3);
+		 ADC_MultiChannel(ADC1, 2, channels);
+
+		 while (1){
+
+			 sumX = 0;
+		     sumY = 0;
+		     for (int i = 0; i < 8; i++){
+		    	 ADC_GetMultiConversions(ADC1, 2, adc);
+				 sumX += adc[0];
+				 sumY += adc[1];
+		     }
+
+		     pulseX = map(sumX / 8, 0, 4095, SERVO_MIN_US, SERVO_MAX_US);
+		     pulseY = map(sumY / 8, 0, 4095, SERVO_MIN_US, SERVO_MAX_US);
+
+
+		     if (pulseX < SERVO_MIN_US) pulseX = SERVO_MIN_US;
+		     if (pulseX > SERVO_MAX_US) pulseX = SERVO_MAX_US;
+		     if (pulseY < SERVO_MIN_US) pulseY = SERVO_MIN_US;
+		     if (pulseY > SERVO_MAX_US) pulseY = SERVO_MAX_US;
+		     TIM4->CCR1 = pulseX;
+		     TIM4->CCR2 = pulseY;
+		     Delay_ms(20);
+
+		 }
+
+
+
+}
 
 /* USER CODE END 0 */
 
@@ -444,7 +545,9 @@ int main(void)
   //aula_10_09();
   //aula08_10();
   //aula05_11();
-  aula12_11();
+  //aula12_11();
+  //questao2_2();
+  prova2_7();
   /* Infinite loop */
 
 
